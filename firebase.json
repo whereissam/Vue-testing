@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "vue-testing-13f48",
     "public": "dist",
     "ignore": [
       "firebase.json",
