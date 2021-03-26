@@ -1,15 +1,24 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/product">Product</router-link> |
-      <!-- <router-link to="/productdetail">ProductDetail</router-link> | -->
+    <div class="flex flex-col h-screen justify-between">
+      <div class="fixed z-20 w-full">
+        <Navbar />
+      </div>
+      <router-view/>
 
+  <!-- <Footer /> -->
     </div>
-    <router-view/>
   </div>
 </template>
+<script>
+import Navbar from './components/navbar'
+
+export default {
+  name: 'App',
+  components:{ Navbar}, 
+}
+
+</script>
 
 <style>
 #app {
