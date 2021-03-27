@@ -11,8 +11,10 @@
                     <div class="container mx-auto">
                         <div class="flex flex-col w-full lg:w-1/2 md:ml-16 items-center md:items-start px-6 tracking-wide">
                             <p class="text-black text-2xl my-4">L chair</p>
-                            <a class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" href="#">view product</a>
-                        </div>
+							<router-link class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" @click="viewPeroduct()" to="/products/9">
+                            	view product
+                        	</router-link>
+						</div>
                     </div>
 			</div>
 		</div>
@@ -27,7 +29,9 @@
                     <div class="container mx-auto">
                         <div class="flex flex-col w-full lg:w-1/2 md:ml-16 items-center md:items-start px-6 tracking-wide">
                             <p class="text-white text-2xl my-4">Red chair</p>
-                            <a class="text-xl text-white inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" href="#">view product</a>
+                            <router-link class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" @click="viewPeroduct()" to="/products/10">
+                            	view product
+                        	</router-link>
                         </div>
                     </div>
 			</div>
@@ -43,7 +47,9 @@
                     <div class="container mx-auto">
                         <div class="flex flex-col w-full lg:w-1/2 md:ml-16 items-center md:items-start px-6 tracking-wide">
                             <p class="text-black text-2xl my-4">White plastic chiar</p>
-                            <a class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" href="#">view product</a>
+                            <router-link class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" @click="viewPeroduct()" to="/products/11">
+                            	view product
+                        	</router-link>
                         </div>
                     </div>
 			</div>
@@ -60,8 +66,10 @@
 
                     <div class="container mx-auto">
                         <div class="flex flex-col w-full lg:w-1/2 md:ml-16 items-center md:items-start px-6 tracking-wide">
-                            <p class="text-white text-2xl my-4">Cozy chair</p>
-                            <a class="text-xl text-white inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" href="#">view product</a>
+                            <p class="text-white text-2xl my-4">Red chair</p>
+                            <router-link class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black" @click="viewPeroduct()" to="/products/12">
+                            	view product
+                        	</router-link>
                         </div>
                     </div>
 			</div>

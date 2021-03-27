@@ -1,5 +1,5 @@
 <template>
-    <div  class="backdrop top-0 fixed bg-black bg-opacity-50 w-full h-full flex justify-end" @click.self="closeModal"> 
+    <div  class="z-10 backdrop top-0 fixed bg-black bg-opacity-50 w-full h-full flex justify-end" @click.self="closeModal"> 
         <div class="modal flex flex-wrap sm:w-20 md:w-1/3 lg:w-1/4 h-full p-10 bg-gray-900 rounded-lg" 
             :class="{ car : theme == 'car'}"
             >
@@ -11,9 +11,9 @@
                 </div>
                 <div v-if="carts" class="relative">
                     <div class='w-full flex h-24 mt-5 border-t-2 pt-5 border-gray-700' v-for='(product,index) in carts' :key='product.id'>
-                    <!-- <div>{{index}}</div> -->
+                    <button class="detail absolute right-2" @click="removeHandler(index,product.id)">x</button>
                     <img class="w-15 h-15 " :src="product.img">
-                    <button class="detail" @click="removeHandler(product.id)"></button>
+                    
                     <div class="w-full p-2 text-sm">
                         <h1 class=" mb-3  text-left ml-2">{{product.name}}</h1>
                         <div class="flex ml-2 w-full justify-between">
@@ -56,7 +56,7 @@
                         <p class="self-center text-sm">{{ totalPrice | showPrice}}</p>
                     </div>
                     
-                    <button class="absolute left-0 bottom-9 border-2 h-8 w-full"><a href="#">View cart</a></button>
+                    <button class="absolute left-0 bottom-9 border-2 h-8 w-full" @click="viewCart">View cart</button>
                     <button class="absolute left-0 -bottom-2 border-2 h-8 w-full">Checkout</button>
             </div>
             </div>
@@ -85,11 +85,11 @@ export default {
     },
   },
    computed:{
-            totalPrice(){
-                 return this.carts.reduce((prevValue, product)=>{
-        return prevValue + product.price * product.number
-      }, 0)
-            } 
+        totalPrice(){
+          return this.carts.reduce((prevValue, product)=>{
+            return prevValue + product.price * product.number
+            }, 0)
+          } 
         },
   methods:{
     closeModal(){
@@ -107,8 +107,10 @@ export default {
         });
     },
     increment(index,id){
+        let value = this.carts[index].number ++
+        console.log(this.carts[index].number)
         db.collection("cart").doc(id).update({
-			"number": this.carts[index].number ++
+			"number": value
         })
         .then(() => {
             console.log("Document successfully written!");
@@ -117,13 +119,21 @@ export default {
             console.error("Error writing document: ", error);
         });
     },
-        removeHandler(id){
+        removeHandler(index,id){
+            // console.log(index)
          db.collection("cart").doc(id).delete().then(() => {
+            //  console.log(index)
+            this.carts.splice(index,1)
             console.log("Document successfully deleted!");
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });
-        }
+        },
+      viewCart(){
+          this.$emit('close')
+          this.$router.push('/cart') 
+          
+      },
   },
   created(){
         db.collection("cart").get().then((querySnapshot) => {
@@ -155,11 +165,12 @@ export default {
     /* background-color: crison; */
     color:#EEEEEE;
 }
-.detail::before{
+/* .detail::before{
   content: "x";
+  border: #EEEEEE;
   color:#EEEEEE;
   position: absolute;
   right: 10px;
-    top: 15px
-}
+  top: 15px
+} */
 </style>

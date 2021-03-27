@@ -1,45 +1,28 @@
 <template>
- <!-- <div class='w-full h-full flex flex-nowrap bg-gray-600 bg-opacity-25'>
-
-  <div class='darks bg-gray-600 w-9/12' @click="$router.go(-1)"></div>
-
-  <div class='w-1/4 flex flex-wrap bg-gray-800' >
-    <h2 class='text-white w-full text-right mr-5 mt-5 ml-5 h-10 border-b-2 cursor-pointer' @click="$router.go(-1)">close</h2>
-    <div class='border-gray-800 w-full text-center'>
-      <div class='text-center self-start'>X</div>
-      No products in the cart.</div>
-    <p class='border-2 border-gray-500 border-opacity-50 w-full text-center h-14 align-middle m-5 md:h-7 self-end cursor-pointer' @click="$router.go(-1)">Continue shopping</p>
-  </div>
-</div> -->
-
-
 <body class="bg-gray-100 mt-20">
   <div class="container mx-auto mt-10">
     <div class="flex shadow-md my-10">
       <div class="w-3/5 bg-white px-10 py-10">
         <div class="flex justify-between border-b pb-8">
           <h1 class="font-semibold text-2xl">Shopping Cart</h1>
-          <h2 class="font-semibold text-2xl">3 Items</h2>
+          <h2 class="font-semibold text-2xl">{{ carts.length}} Items</h2>
         </div>
                   <div v-if="carts" class="relative m-10">
-                    <div class='w-full flex h-24 border-gray-300' v-for='product in carts' :key='product.id'>
+                    <div class='w-full flex h-24 border-gray-300' v-for='(product,index) in carts' :key='product.id'>
                     <img class="w-20 h-20 " :src="product.img">
-                    <button class="detail" @click="deletes(product.id)"></button>
+                    <button class="detail absolute right-2" @click="removeHandler(index,product.id)">x</button>
                     <div class="w-full p-2">
                         <h1 class=" mb-3 text-left ml-2">{{product.name}}</h1>
                         <div class="flex ml-2 w-full justify-between">
                             <div class="flex ">
-                                <p class="text-sm mr-2">Qty</p>
-                                <button @click='inc1(product.id,product.number)' class="text-xs mx-1">◀</button>
-                                <input class="w-6 text-sm text-center" 
+                                <p class="mr-2">Qty</p>
+                                <button @click='decrement(index,product.id)' :disabled='product.number < 2' class="text-xs">◀</button>
+                                <input class="w-6 text-center" 
                                         type="text"
-                                        v-model.number="value" 
-                                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                        @change="quantity"
-                                >
-                                <button @click='add1(product.id,product.number)' class="text-xs mx-1">▶</button>
+                                        v-model.number="product.number" >
+                                <button @click='increment(index,product.id)' class="text-xs">▶</button>
                             </div>
-                            <p class="text-sm">{{product.number * product.price}}</p>
+                            <p class="text-sm">${{product.number * product.price}}</p>
                         </div>
 
                         </div>
@@ -62,19 +45,17 @@
                 </div>
           
 
-        
-        <a href="#" class="flex font-semibold text-indigo-600 text-sm mt-10 " >
-      
-          <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"/></svg>
-          Continue Shopping
-        </a>
+        <router-link class="flex font-semibold text-indigo-600 text-sm mt-10 " to="/products">
+            <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"/></svg>
+            Continue Shopping
+        </router-link>
       </div>
 
       <div id="summary" class="w-2/5 px-8 py-10">
         <h1 class="font-semibold text-2xl border-b pb-8">Order Summary</h1>
-        <div class="flex justify-between mt-10 mb-5">
-          <span class="font-semibold text-sm uppercase">Items 3</span>
-          <span class="font-semibold text-sm">590$</span>
+        <div class="flex justify-between mt-10 mb-5" >
+          <span class="font-semibold text-sm uppercase">Items {{ carts.length}}</span>
+          <span class="font-semibold text-sm">{{totalPrice | showPrice}}</span>
         </div>
         <div>
           <label class="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
@@ -90,7 +71,7 @@
         <div class="border-t mt-8">
           <div class="flex font-semibold justify-between py-6 text-sm uppercase">
             <span>Total cost</span>
-            <span>$600</span>
+            <span>${{totalPrice +10 }}</span>
           </div>
           <button class="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
         </div>
@@ -103,7 +84,7 @@
 
 </template>
 <script>
-
+import db from '../components/firebase'
 
 export default {
   name: 'Cart',
@@ -112,59 +93,83 @@ export default {
   },
    data(){
       return{
-          carts:null,
-          value: 1,
-          newPrice: ''
+          carts: [],
       }
   },
-  computed:{
-      addTotal(){
-        //this.carts.reduce() or for(){ return xx} or for of xx {}
-          // return this.newPrice = 
-          
-      }
+  filters:{
+    showPrice(price){
+      return '$' + price.toFixed(2)
+    },
   },
+   computed:{
+        totalPrice(){
+          return this.carts.reduce((prevValue, product)=>{
+            return prevValue + product.price * product.number
+            }, 0)
+          } 
+        },
   methods:{
-      closeModal(){
-          this.$emit('close') //
-      },
-      add1(id,number){
-      this.value = this.value +1
-    //   console.log(id,number,this.value)
-    //   fetch('http://localhost:3000/carts/' + id,{
-    //       method: 'PATCH',
-    //       body: JSON.stringify({
-    //           number : this.value
-    //       }),
-    //       headers:{ "Content-Type" : 'application/json'}  
-    //   })
-    //     .then((res) => res.json())
-    //     .then(data => this.carts = data)
-    //     .catch(err => console.log(err.message))
-      },
-      inc1(){
-      this.value = this.value -1
-      },
-      deletes(id){
-        //   fetch('http://localhost:3000/carts/' + id,{
-        //       method: 'DELETE'
-    // })
-    //   console.log(id)
-    }
+    closeModal(){
+        this.$emit('close') //
+    },
+    decrement(index,id){
+          db.collection("cart").doc(id).update({
+			"number": this.carts[index].number --
+        })
+        .then(() => {
+            console.log("Document successfully written!");
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+    },
+    increment(index,id){
+        let value = this.carts[index].number ++
+        // console.log(this.carts[index].number)
+        db.collection("cart").doc(id).update({
+			    "number": value
+        })
+        .then(() => {
+            console.log("Document successfully written!");
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+    },
+    removeHandler(index,id){
+         db.collection("cart").doc(id).delete().then(() => {
+           this.carts.splice(index,1)
+            console.log("Document successfully deleted!");
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+        });
+    },
   },
-    mounted(){ //get data
-   
-  }
-
+      created(){
+        db.collection("cart").get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              // console.log(`${doc.id} => ${doc.data()}`);
+              const data = {
+                'id' : doc.id,
+                'name' : doc.data().name,
+                'number' : doc.data().number,
+                'price' : doc.data().price,
+                'img' : doc.data().img
+              }
+              this.carts.push(data)
+             
+            }); 
+        });
+    }
 }
 </script>
 <style>
 
-.detail::before{
+/* .detail::before{
   content: "x";
   color:#EEEEEE;
   position: absolute;
   right: 10px;
     top: 15px
-}
+} */
 </style>

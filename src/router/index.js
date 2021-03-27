@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const Home = () => import('../views/Home.vue')
 const About =() => import('../views/About.vue')
-// const News = () => import('../views/New.vue')
+const News = () => import('../views/News.vue')
 const Product = () => import( '../components/Products.vue')
 const ProductDetail = () => import( '../views/ProductDetail.vue')
 const Cart = () => import( '../views/Cart.vue')
@@ -27,11 +27,11 @@ const routes = [
     name: 'About',
     component: About
   },
-  // {
-  //   path: '/news',
-  //   name: 'News',
-  //   component: News
-  // },
+  {
+    path: '/news',
+    name: 'News',
+    component: News
+  },
   {
     path: '/products',
     name: 'Product',

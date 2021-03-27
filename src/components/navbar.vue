@@ -5,11 +5,13 @@
   <!-- Logo text or image -->
   <div class="flex items-center justify-between mb-4 md:mb-0">
     <h1 class="leading-none text-2xl text-grey-darkest">
-      <a class="no-underline text-grey-darkest hover:text-black" href="http://localhost:8080/vueweb-chairgo/">
+      <router-link to="/">
+      <a class="no-underline text-grey-darkest hover:text-black" href="">
         Chair
       </a>
+      </router-link>
       <router-link to="/display">
-        <a class="no-underline text-grey-darkest hover:text-black" href="http://localhost:8080/">
+        <a class="no-underline text-grey-darkest hover:text-black" href="">
           GO
         </a>
       </router-link>
