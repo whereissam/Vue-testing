@@ -8,19 +8,16 @@
                       Shop
                     </a>
                     <!-- <div class="flex items-center z-0" id="store-nav-content">
-
                         <a class="z-0 pl-3 inline-block no-underline hover:text-black" href="">
                             <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
                             </svg>
                         </a>
-
                         <a class="z-0 pl-3 inline-block no-underline hover:text-black" href="#">
                             <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
                             </svg>
                         </a>
-
                     </div> -->
               </div>
             </nav>
@@ -46,14 +43,15 @@
 </template>
 
 <script>
-
+// import BScroll from 'better-scroll'
 import db from './firebase'
 
 export default {
   name: 'products',
    data(){
       return{
-          products:[]
+          products:[],
+          scroll : null
       }
   },
   methods:{
@@ -62,7 +60,7 @@ export default {
           this.$router.push('/products/' + id) //等同於router-link
       },
   },
-    created(){
+  created(){
         db.collection("products").get().then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
               // console.log(`${doc.id} => ${doc.data()}`);
@@ -76,7 +74,12 @@ export default {
               this.products.push(data)
             });
         });
-    },
+  },
+//  mounted(){
+//     this.scroll = new BScroll('document.querySelector("#category")',{
+      
+//     })
+//   }
    
 //   computed:{
 //       productId(){
@@ -85,3 +88,12 @@ export default {
 //   }
   }
 </script>
+<style scoped>
+/* #content{
+    margin: 50px;
+    height: 800px;
+    overflow: hidden;
+    background-color: red;
+    overflow-y: scroll;
+} */
+</style>

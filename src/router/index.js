@@ -11,6 +11,7 @@ const ProductDetail = () => import( '../views/ProductDetail.vue')
 const Cart = () => import( '../views/Cart.vue')
 const Contact = () => import( '../views/Contact.vue')
 const Sign = () => import( '../views/Sign.vue')
+const Checkout = () => import( '../views/Checkout.vue')
 const Create = () => import( '../views/Create.vue')
 // const Vuecanvas = () => import( '../components/P5-canvas.vue')
 // const officeChair = () => import('../views/product/OfficeChair.vue')
@@ -62,6 +63,11 @@ const routes = [
     path: '/Create',
     name: 'Create',
     component: Create
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: Checkout
   },
   // {
   //   path: '/display',

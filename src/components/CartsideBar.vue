@@ -9,7 +9,7 @@
                 <div class="w-full text-right" >
                     <button @click="closeModal">close</button>
                 </div>
-                <div v-if="carts" class="relative">
+                <div v-if="carts" class="relative scroll">
                     <div class='w-full flex h-24 mt-5 border-t-2 pt-5 border-gray-700' v-for='(product,index) in carts' :key='product.id'>
                     <button class="detail absolute right-2" @click="removeHandler(index,product.id)">x</button>
                     <img class="w-15 h-15 " :src="product.img">
@@ -34,7 +34,6 @@
 
                         </div>
                     </div>
-                    
                 </div>
               
                 <div v-else>
@@ -57,7 +56,7 @@
                     </div>
                     
                     <button class="absolute left-0 bottom-9 border-2 h-8 w-full" @click="viewCart">View cart</button>
-                    <button class="absolute left-0 -bottom-2 border-2 h-8 w-full">Checkout</button>
+                    <button class="absolute left-0 -bottom-2 border-2 h-8 w-full" @click="viewBill">Checkout</button>
             </div>
             </div>
         </div>
@@ -76,7 +75,7 @@ export default {
   },
    data(){
       return{
-          carts: []
+          carts: [],
       }
   },
    filters:{
@@ -119,7 +118,7 @@ export default {
             console.error("Error writing document: ", error);
         });
     },
-        removeHandler(index,id){
+    removeHandler(index,id){
             // console.log(index)
          db.collection("cart").doc(id).delete().then(() => {
             //  console.log(index)
@@ -128,12 +127,15 @@ export default {
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });
-        },
-      viewCart(){
+    },
+    viewCart(){
           this.$emit('close')
           this.$router.push('/cart') 
-          
-      },
+    },
+    viewBill(){
+          this.$emit('close')
+          this.$router.push('/checkout') 
+    }
   },
   created(){
         db.collection("cart").get().then((querySnapshot) => {
@@ -153,7 +155,12 @@ export default {
               
         });
         // console.log(this.carts)
-    }
+    },
+    // mounted(){
+    //     this.scroll = new BScroll('#cart',{
+      
+    // })
+    // }
 
 }
 </script>
@@ -164,6 +171,13 @@ export default {
 .modal.car{
     /* background-color: crison; */
     color:#EEEEEE;
+}
+.scroll{
+    height: 500px;
+    overflow: hidden;
+    overflow-y: scroll;
+    /* padding-left: 20px; */
+    /* margin-left: 20px; */
 }
 /* .detail::before{
   content: "x";
